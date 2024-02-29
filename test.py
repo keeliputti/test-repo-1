@@ -85,3 +85,18 @@ class TestReadDescriptionFile(unittest.TestCase):
 
 if __name__ == '__main__':
     unittest.main()
+
+import json
+from unittest.mock import patch, MagicMock
+
+# I don't care about the actual open
+p1 = patch( "builtins.open", MagicMock() )
+
+m = MagicMock( side_effect = [ { "foo": "bar" } ] )
+p2 = patch( "json.load", m )
+
+with p1 as p_open:
+    with p2 as p_json_load:
+        f = open( "filename.json" )
+        print( json.load( f ) )
+        
