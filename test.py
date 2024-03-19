@@ -1,38 +1,36 @@
-import unittest
-from unittest.mock import patch, MagicMock
+from typing import Optional
+from pydantic import BaseModel
 
-from test import read_description_file  # Assuming the function is in a separate file
+class Class1(BaseModel):
+    flag: str
 
-class TestReadDescriptionFile(unittest.TestCase):
+class Class2(BaseModel):
+    data1: str
+    data2: int
+    data3: Optional[str] = None
 
-    @patch('read_description_file.os.path.dirname')
-    @patch('read_description_file.os.path.join')
-    @patch('read_description_file.builtins.open')
-    @patch('read_description_file.json.load')
-    def test_read_description_file(self, mock_json_load, mock_open, mock_join, mock_dirname):
-        """Tests the read_description_file function with mocking."""
 
-        # Mock return values
-        mock_dirname.return_value = '/path/to/current/directory'
-        mock_join.return_value = '/path/to/descriptions.json'
-        mock_file = MagicMock()
-        mock_open.return_value = mock_file
-        mock_file.__enter__.return_value = mock_file  # Simulate file object
-        mock_data = {'key': 'value'}
-        mock_json_load.return_value = mock_data
+from typing import Union
 
-        # Call the function
-        source = 'test_source'
-        descriptions = read_description_file(source)
+class CombinedSchema(BaseModel):
+    class1: Class1
+    class2: Union[Class2, None]
 
-        # Assertions
-        mock_dirname.assert_called_once_with(__file__)
-        mock_join.assert_called_once_with('/path/to/current/directory', '../catalog/descriptions.json')
-        mock_open.assert_called_once_with('/path/to/descriptions.json', 'r')
-        mock_file.__enter__.assert_called_once()
-        mock_file.close.assert_called_once()
-        mock_json_load.assert_called_once_with(mock_file)
-        self.assertEqual(descriptions, mock_data)
+    @classmethod
+    def __get_validators__(cls):
+        yield from super().__get_validators__()
+        yield cls.validate_flag
 
-if __name__ == '__main__':
-    unittest.main()
+    @classmethod
+    def validate_flag(cls, value):
+        if value == "internal":
+            yield {"class2": {"__config__": {"validate_all": True}}}
+        else:
+            yield value
+
+
+
+schema = CombinedSchema(class1=Class1(flag="internal"), class2=Class2(data1="abc", data2="xyz"))
+# Valid, no validation for Class2 fields
+
+schema = CombinedSchema(class1=Class1(flag="external"), class2=Class2(data1="123", data2="invalid"))  # Validation error for data2
