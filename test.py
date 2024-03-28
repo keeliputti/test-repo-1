@@ -38,34 +38,91 @@ schema = CombinedSchema(class1=Class1(flag="external"), class2=Class2(data1="123
 
 
 
-## Drafted Goals for Performance and Impact:
+import org.apache.arrow.memory.BufferAllocator;
+import org.apache.arrow.memory.RootAllocator;
+import org.apache.arrow.vector.*; // Import all vector types
+import org.apache.arrow.vector.ipc.ArrowFileWriter;
+import java.io.ByteArrayOutputStream;
+import java.util.ArrayList;
+import java.util.List;
 
-**1. Data Framework: Automating Access and Client Onboarding**
+public class ArrowSerialization {
 
-* **Goal:** Implement a configuration service to automate access deployments for clients, eliminating manual intervention and associated delays. This will standardize the onboarding process, improve efficiency, and allow for faster response times to client inquiries.
-* **Metrics:**  
-    *  Reduction in manual access deployment time by X%.
-    *  Decrease in client onboarding delays by Y%.
+  public static byte[] serializeListObjects(List<Object> dataList) throws IOException {
+    // Allocate memory
+    BufferAllocator allocator = new RootAllocator(Long.MAX_VALUE);
 
-**2. dzclients: Parity and Efficiency**
+    // Define Field Vectors based on data types in dataList
+    List<FieldVector> vectors = new ArrayList<>();
+    List<Field> fields = new ArrayList<>();
 
-* **Goal 1:** Achieve and maintain feature parity between dpy (Python) and djava (Java) libraries within dzclients. This will ensure consistent functionality for all clients regardless of programming language preference.
-* **Goal 2:** Develop and integrate serialization capabilities using Arrow for storing Java POJOs. This will enable faster data transfer from clients to the server and eliminate data type (dtype) inconsistencies.
-* **Metrics:**
-    *  Maintain 100% feature parity between dpy and djava libraries.
-    *  Reduce data transfer time by Z% through Arrow serialization.
+    for (Object obj : dataList) {
+      FieldVector vector = null;
+      String fieldName = "field_" + vectors.size(); // Generate unique field names
 
-**3. User Engagement: Knowledge, Support, and Continuous Improvement**
+      if (obj instanceof Integer) {
+        vector = new IntVector(fieldName, allocator);
+      } else if (obj instanceof Long) {
+        vector = new BigIntVector(fieldName, allocator);
+      } else if (obj instanceof Float) {
+        vector = new Float4Vector(fieldName, allocator);
+      } else if (obj instanceof Double) {
+        vector = new Float8Vector(fieldName, allocator);
+      } else if (obj instanceof String) {
+        vector = newVarCharVector(fieldName, allocator);
+      } else {
+        // Handle other data types or throw an exception
+        throw new IllegalArgumentException("Unsupported data type: " + obj.getClass().getName());
+      }
 
-* **Goal 1:**  Continuously ensure effective communication of new developments to clients, keeping them informed and maximizing utilization of dz's offerings. 
-* **Goal 2:**  Maintain a high level of client satisfaction by providing ongoing support and addressing their requirements. This includes assisting non-technical clients in understanding and utilizing dz's functionalities.
-* **Metrics:**
-    *  Conduct X client satisfaction surveys per quarter.
-    *  Maintain a Y% positive client satisfaction rating.
+      vector.allocateNew();
 
-**Additional Tips:**
+      // Add elements to the vector based on data type
+      if (vector instanceof IntVector) {
+        ((IntVector) vector).setSafe(0, (Integer) obj);
+      } else if (vector instanceof BigIntVector) {
+        ((BigIntVector) vector).setSafe(0, (Long) obj);
+      } else if (vector instanceof Float4Vector) {
+        ((Float4Vector) vector).setSafe(0, (Float) obj);
+      } else if (vector instanceof Float8Vector) {
+        ((Float8Vector) vector).setSafe(0, (Double) obj);
+      } else if (vector instanceof VarCharVector) {
+        ((VarCharVector) vector).setValueLength(0, ((String) obj).getBytes().length);
+        ((VarCharVector) vector).setSafe(0, ((String) obj).getBytes());
+      }
 
-* Feel free to adjust these goals further to better reflect your specific role and responsibilities. 
-*  Quantify your goals whenever possible using metrics to demonstrate the impact of your work.
-* Be sure to align these goals with your firm's overall objectives for the year.
+      vector.close();
+      vectors.add(vector);
+      fields.add(new Field(fieldName, vector.getField().getFieldType(), null)); // Add field metadata
+    }
+
+    // Create VectorSchemaRoot with fields and vectors
+    VectorSchemaRoot root = new VectorSchemaRoot(new org.apache.arrow.vector.Schema.Builder().build(fields), vectors);
+
+    // Serialize using ArrowFileWriter
+    try (ByteArrayOutputStream bos = new ByteArrayOutputStream();
+         ArrowFileWriter writer = new ArrowFileWriter(bos, allocator)) {
+      writer.write(root);
+      return bos.toByteArray();
+    } finally {
+      root.close();
+      for (FieldVector vector : vectors) {
+        vector.close();
+      }
+      allocator.close();
+    }
+  }
+
+  // Example usage (assuming data contains a mix of Integer, String, and Double)
+  public static void main(String[] args) throws IOException {
+    List<Object> dataList = new ArrayList<>();
+    dataList.add(10);
+    dataList.add("Hello");
+    dataList.add(3.14);
+
+    byte[] serializedBytes = serializeListObjects(dataList);
+
+    // Send serializedBytes to the server
+  }
+}
 
