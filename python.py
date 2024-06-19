@@ -37,55 +37,52 @@ if __name__ == "__main__":
     print(obj2.data_developer_team)  # Output: existing_developer_team
 
 
-
 import matplotlib.pyplot as plt
 import matplotlib.patches as mpatches
 
-# Create a figure and axis
-fig, ax = plt.subplots(figsize=(12, 8))
+# Create a new figure
+fig, ax = plt.subplots(figsize=(10, 8))
 
-# Define the positions of the client, KDC, and server
-client_pos = (1, 1)
-kdc_pos = (5, 1)
-server_pos = (9, 1)
+# Define positions
+client_pos = (1, 7)
+kdc_pos = (5, 7)
+as_pos = (5, 6)
+tgs_pos = (5, 4)
+server_pos = (9, 7)
 
-# Draw the components
-ax.text(client_pos[0], client_pos[1], "Client", fontsize=12, ha='center', bbox=dict(facecolor='lightblue', edgecolor='black', boxstyle='round,pad=0.5'))
-ax.text(kdc_pos[0], kdc_pos[1], "KDC", fontsize=12, ha='center', bbox=dict(facecolor='lightgreen', edgecolor='black', boxstyle='round,pad=0.5'))
-ax.text(server_pos[0], server_pos[1], "Server", fontsize=12, ha='center', bbox=dict(facecolor='lightcoral', edgecolor='black', boxstyle='round,pad=0.5'))
+# Draw entities
+ax.text(*client_pos, "Client", ha='center', va='center', fontsize=12, bbox=dict(facecolor='lightblue', edgecolor='black'))
+ax.text(*kdc_pos, "Key Distribution Center (KDC)", ha='center', va='center', fontsize=12, bbox=dict(facecolor='lightgreen', edgecolor='black'))
+ax.text(*as_pos, "Authentication Server (AS)", ha='center', va='center', fontsize=12, bbox=dict(facecolor='lightyellow', edgecolor='black'))
+ax.text(*tgs_pos, "Ticket Granting Server (TGS)", ha='center', va='center', fontsize=12, bbox=dict(facecolor='lightyellow', edgecolor='black'))
+ax.text(*server_pos, "Server", ha='center', va='center', fontsize=12, bbox=dict(facecolor='lightcoral', edgecolor='black'))
 
-# Draw the arrows and labels
-arrowprops = dict(facecolor='black', arrowstyle='->')
+# Draw arrows and labels for protocol flow
+flow_steps = [
+    (client_pos, as_pos, "Initial Client Authentication Request"),
+    (as_pos, client_pos, "AS Issues TGT and SK1"),
+    (client_pos, tgs_pos, "Client Uses TGT to Request Service Ticket"),
+    (tgs_pos, client_pos, "TGS Issues Service Ticket"),
+    (client_pos, server_pos, "Client Sends Service Ticket to Server"),
+    (server_pos, client_pos, "Server Verifies Client and Grants Access"),
+]
 
-# Initial Client Authentication Request
-ax.annotate('', xy=(kdc_pos[0], kdc_pos[1] - 0.3), xytext=(client_pos[0], client_pos[1] - 0.3), arrowprops=arrowprops)
-ax.text((client_pos[0] + kdc_pos[0]) / 2, client_pos[1] - 0.4, "1. Request TGT", fontsize=10, ha='center')
+for start_pos, end_pos, text in flow_steps:
+    ax.annotate(
+        text,
+        xy=end_pos, xycoords='data',
+        xytext=start_pos, textcoords='data',
+        arrowprops=dict(arrowstyle="->", color='black'),
+        bbox=dict(boxstyle="round,pad=0.3", edgecolor='black', facecolor='white'),
+        ha='center',
+        va='center',
+        fontsize=10
+    )
 
-# KDC Verification and TGT Issuance
-ax.annotate('', xy=(client_pos[0], client_pos[1] - 0.6), xytext=(kdc_pos[0], kdc_pos[1] - 0.6), arrowprops=arrowprops)
-ax.text((client_pos[0] + kdc_pos[0]) / 2, client_pos[1] - 0.7, "2. TGT & Session Key", fontsize=10, ha='center')
-
-# Client Decrypts Message
-ax.text(client_pos[0], client_pos[1] - 0.9, "3. Decrypt TGT & Session Key", fontsize=10, ha='center')
-
-# TGT to Request Access
-ax.annotate('', xy=(kdc_pos[0], kdc_pos[1] - 1.2), xytext=(client_pos[0], client_pos[1] - 1.2), arrowprops=arrowprops)
-ax.text((client_pos[0] + kdc_pos[0]) / 2, client_pos[1] - 1.3, "4. Request Service Ticket", fontsize=10, ha='center')
-
-# KDC Creates Service Ticket
-ax.annotate('', xy=(client_pos[0], client_pos[1] - 1.5), xytext=(kdc_pos[0], kdc_pos[1] - 1.5), arrowprops=arrowprops)
-ax.text((client_pos[0] + kdc_pos[0]) / 2, client_pos[1] - 1.6, "5. Service Ticket", fontsize=10, ha='center')
-
-# Client Uses Service Ticket
-ax.annotate('', xy=(server_pos[0], server_pos[1] - 1.8), xytext=(client_pos[0], client_pos[1] - 1.8), arrowprops=arrowprops)
-ax.text((client_pos[0] + server_pos[0]) / 2, client_pos[1] - 1.9, "6. Access Request", fontsize=10, ha='center')
-
-# Target Server Authentication
-ax.annotate('', xy=(client_pos[0], client_pos[1] - 2.1), xytext=(server_pos[0], server_pos[1] - 2.1), arrowprops=arrowprops)
-ax.text((client_pos[0] + server_pos[0]) / 2, client_pos[1] - 2.2, "7. Access Granted", fontsize=10, ha='center')
-
-# Remove axis
+# Set axis limits and hide axes
+ax.set_xlim(0, 10)
+ax.set_ylim(0, 8)
 ax.axis('off')
 
-# Show the diagram
+# Display the diagram
 plt.show()
