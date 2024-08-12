@@ -1,0 +1,9 @@
+Certainly! Here's how you can structure the documentation:
+
+### When to Use OAuth Token Exchange Flow
+- Use the OAuth Token Exchange flow when you need to exchange one type of token for another, typically in scenarios involving cross-domain authentication or authorization delegation.
+
+### Prerequisites
+- **Identity Provider Registration**: Ensure you are registered with the Identity Provider (IdP), specifically 
+- **Environment Variable Setup**: Set the registration ID in the system environment variable  .
+- **API Request Preparation**: Prepare an HTTP POST request and include your initial access token in the request to our  API. For detailed instructions, refer to [this example](link to example).
