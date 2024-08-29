@@ -1,18 +1,20 @@
-General Audience Instructions:
-Retrieve Credentials:
-Securely fetch the client_id and private_key needed to create and sign the JWT.
-Generate a JWT Bearer Token:
-Create a signed JWT using the retrieved client_id and private_key, with claims that include the issuer, subject, audience, issue time, and expiration time.
-Perform the Token Exchange:
-Use the JWT Bearer Token and a subject token in a POST request to the OIDC token endpoint.
-Include necessary parameters such as grant_type, scope, subject token, client_assertion_type, and client_assertion in the request body.
-Handle the POST request using a retry mechanism for robustness.
 
-### Summary Workflow:
-1. **User performs OAuth 2.0 authorization** to obtain an initial access token.
-2. **Client application retrieves required credentials** (e.g., Client ID, private key) from a secure storage system.
-3. **Prepare and sign a JWT** for the token exchange.
-4. **Make an HTTP POST request** to the token endpoint with the signed JWT and the initial OAuth token.
-5. **Receive the exchanged token** and use it for subsequent API requests.
 
-These steps ensure that the user is ready to execute a secure and compliant token exchange process.
+Subject: OAuth 2.0 Enabled for GET API in dfclient
+
+Dear Team,
+
+We are excited to announce a significant enhancement to the dfclient. OAuth 2.0 is now enabled for the GET API, improving security by replacing username-based authorization with industry-standard tokens. This feature is SecArch approved and reduces the exposure of a single application's proid accessing all datasets, allowing for user-based, granular level entitlement control.
+
+This feature is available with dzjava version 2024.08.27-42 and above. Please refer to the *** documentation: [G***h](link) for detailed instructions, including a working example, documentation, and sample code.
+
+For a practical example, please see the [link to perform *** API call with OAuth token](link).
+
+This update is production-ready and we encourage you to start using it to benefit from the enhanced security and control.
+
+If you have any questions or feedback, please let me know.
+
+Thank you.
+
+Best regards,
+[Your Name]
