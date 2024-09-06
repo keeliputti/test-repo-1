@@ -1,1 +1,20 @@
 
+Option 1: Neutral and to the point
+Subject: No Deployment on 5th Sept – Consolidated Details
+We didn’t detect any changes on the morning of 5th September. If changes were made before BatMobile initiated the PR process, it’s possible they hadn’t yet been updated in the FDC. A delay in FDC updates could be due to the long queue of requests. Marketplace offers a feature to prioritize requests if you provide the fully qualified name or request ID.
+
+I’ve consolidated more details and added FAQs about Accessible deployments to Jive, which also includes steps for ad-hoc deployments.
+
+Option 2: Slightly more formal but still straightforward
+Subject: 5th Sept Deployment – Key Details
+There were no changes detected on the morning of 5th September, which is why no deployment occurred. If changes were made prior to BatMobile initiating the PR, they might not have been updated in the FDC yet. This can happen if there’s a long queue of requests. Marketplace does allow prioritization by using a fully qualified name or request ID.
+
+I’ve gathered some additional details and added FAQs about Accessible deployments on Jive, where you can also find steps for ad-hoc deployments.
+
+Option 3: Slightly casual and confident
+Subject: 5th Sept Deployment Clarification
+We didn’t notice any changes on the morning of 5th September, so there was no deployment. If changes were made before BatMobile kicked off, it’s possible they weren’t updated in the FDC yet. Sometimes it takes a while due to the queue. If you’re in a hurry, you can prioritize the request by providing the fully qualified name or request ID.
+
+I’ve added more details and FAQs about Accessible deployments to Jive. The steps for ad-hoc deployment are also in there.
+
+Which tone feels the best fit for you?
