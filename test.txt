@@ -1,5 +1,1 @@
-collect_args_required = {
-    arg["name"]: arg.get("default", None)
-    for arg in kwargs.get('collect_args_required', [])
-}
 
