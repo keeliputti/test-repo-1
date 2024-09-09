@@ -1,1 +1,1 @@
-
+"We have ensured that it is not hard-coded: <link>. The screenshot in the email shows a random, partially cut-off string just as an example. I hope that's fine."
