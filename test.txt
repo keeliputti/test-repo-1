@@ -1,1 +1,8 @@
 
+the server is correctly configured to allow connections for the following combination:
+
+Username: datazonedev
+Host: ivdb1363199.devin3.ms.com
+Port: 5051
+Database: csaf
+Could you please ensure that this configuration is valid in the pg_hba.conf file and any necessary permissions are in place?
