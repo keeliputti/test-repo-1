@@ -1,7 +1,7 @@
 
 the server is correctly configured to allow connections for the following combination:
 
-Username: datazonedev
+Username: 
 Host: ivdb1363199.devin3.ms.com
 Port: 5051
 Database: csaf
