@@ -5,3 +5,6 @@ def try_import(module_name, object_name, warning_message):
     except ImportError:
         warnings.warn(warning_message)
         return None
+
+
+discuss and evaluate different options for providing our users (or dataset onboarders) with a model to configure their settings.
