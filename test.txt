@@ -1,1 +1,7 @@
+ def __call__(self, *args, **kwargs):
+        module = self._load()
+        if module:
+            return module(*args, **kwargs)
+        raise ImportError(f"Failed to load {self.class_name} from {self.module_name}")
+
 
