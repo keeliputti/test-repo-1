@@ -1,1 +1,31 @@
+import warnings
+import importlib
+
+class LazyImport:
+    def __init__(self, module_name, class_name, warning_message):
+        self.module_name = module_name
+        self.class_name = class_name
+        self.warning_message = warning_message
+        self._module = None
+
+    def _load(self):
+        if self._module is None:
+            try:
+                module = importlib.import_module(self.module_name)
+                self._module = getattr(module, self.class_name)
+            except ImportError:
+                warnings.warn(self.warning_message)
+                self._module = None
+        return self._module
+
+    def __getattr__(self, attr):
+        module = self._load()
+        return getattr(module, attr) if module else None
+
+# Usage in cc.util
+Provider = LazyImport('data.inate.modecata.genevite.tope.cater', 'Modevl', 
+                      "Failed to import Provider Model from dzls")
+
+Package = LazyImport('data.model.catalog.package', 'PackageModel', 
+                     "Failed to import Package Model from dls")
 
