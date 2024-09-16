@@ -1,1 +1,41 @@
+import unittest
+from unittest.mock import patch, MagicMock
+import warnings
+
+class TestLazyImport(unittest.TestCase):
+    @patch('importlib.import_module')
+    def test_lazy_import(self, mock_import):
+        # Define the test cases for each import (module_name, class_name)
+        test_cases = [
+            ('data_model.catalog_provider', 'CatalogProviderModel'),
+            ('data_model.catalog_package', 'CatalogPackageModel'),
+            ('data_model.catalog_dataset', 'CatalogDatasetModel'),
+        ]
+        
+        # Loop through each test case and test the lazy import
+        for module_name, class_name in test_cases:
+            with self.subTest(module_name=module_name, class_name=class_name):
+                # Create a mock module and mock class
+                mock_module = MagicMock()
+                mock_import.return_value = mock_module
+                setattr(mock_module, class_name, MagicMock())
+
+                # Create the LazyImport instance for the current test case
+                lazy_instance = LazyImport(module_name, class_name, 
+                                           f"Failed to import {class_name} from {module_name}")
+                
+                # Ensure import_module is not called upon instantiation (lazy loading)
+                mock_import.assert_not_called()
+
+                # Call the LazyImport instance to trigger the import
+                lazy_instance()
+                
+                # Verify that import_module is called correctly when the instance is invoked
+                mock_import.assert_called_once_with(module_name)
+                
+                # Reset the mock for the next iteration
+                mock_import.reset_mock()
+
+if __name__ == '__main__':
+    unittest.main()
 
