@@ -1,7 +1,89 @@
- def __call__(self, *args, **kwargs):
-        module = self._load()
-        if module:
-            return module(*args, **kwargs)
-        raise ImportError(f"Failed to load {self.class_name} from {self.module_name}")
+import unittest
+from unittest.mock import patch, MagicMock
+import warnings
+import importlib
 
+class TestLazyImport(unittest.TestCase):
 
+    @patch('importlib.import_module')
+    def test_successful_import(self, mock_import_module):
+        # Setup mock module and class to simulate successful import
+        mock_module = MagicMock()
+        mock_class = MagicMock(return_value="Success!")
+        mock_import_module.return_value = mock_module
+        setattr(mock_module, 'CatalogProviderModel', mock_class)
+
+        # Test LazyImport for successful import and call
+        provider = LazyImport('data_model.catalog_provider', 'CatalogProviderModel', 
+                              "Failed to import Provider Model from data_model")
+        result = provider('arg1', kwarg1='kwvalue1')
+
+        mock_import_module.assert_called_once_with('data_model.catalog_provider')
+        self.assertEqual(result, "Success!")
+        mock_class.assert_called_once_with('arg1', kwarg1='kwvalue1')
+
+    @patch('importlib.import_module')
+    def test_import_error(self, mock_import_module):
+        # Simulate ImportError and expect warning
+        mock_import_module.side_effect = ImportError
+        
+        with self.assertWarns(UserWarning) as warning_context:
+            provider = LazyImport('data_model.catalog_provider', 'CatalogProviderModel', 
+                                  "Failed to import Provider Model from data_model")
+            result = provider('arg1', kwarg1='kwvalue1')
+
+        self.assertIn("Failed to import Provider Model from data_model", str(warning_context.warning))
+        self.assertIsNone(result)
+
+    def test_lazy_loading(self):
+        # Ensure module is only loaded when called
+        provider = LazyImport('data_model.catalog_provider', 'CatalogProviderModel', 
+                              "Failed to import Provider Model from data_model")
+
+        # Initially the module should be None (not loaded yet)
+        self.assertIsNone(provider._module)
+
+        with patch('importlib.import_module') as mock_import_module:
+            mock_module = MagicMock()
+            setattr(mock_module, 'CatalogProviderModel', MagicMock())
+            mock_import_module.return_value = mock_module
+
+            # Only calling should trigger the import
+            provider()
+
+            mock_import_module.assert_called_once_with('data_model.catalog_provider')
+            self.assertIsNotNone(provider._module)  # Now it should be loaded
+
+    @patch('importlib.import_module')
+    def test_failed_class_load(self, mock_import_module):
+        # Simulate that module is imported but class is missing, raising AttributeError
+        mock_module = MagicMock()
+        mock_import_module.return_value = mock_module
+        delattr(mock_module, 'CatalogProviderModel')  # Delete the class from the mock module
+
+        provider = LazyImport('data_model.catalog_provider', 'CatalogProviderModel', 
+                              "Failed to import Provider Model from data_model")
+        
+        with self.assertRaises(ImportError):
+            provider('arg1')
+
+    @patch('importlib.import_module')
+    def test_multiple_calls_same_instance(self, mock_import_module):
+        # Ensure that the module is loaded only once for multiple calls to the same instance
+        mock_module = MagicMock()
+        mock_class = MagicMock()
+        mock_import_module.return_value = mock_module
+        setattr(mock_module, 'CatalogProviderModel', mock_class)
+
+        provider = LazyImport('data_model.catalog_provider', 'CatalogProviderModel', 
+                              "Failed to import Provider Model from data_model")
+
+        # Call the provider twice and ensure import_module is only called once
+        provider('arg1')
+        provider('arg2')
+
+        mock_import_module.assert_called_once_with('data_model.catalog_provider')
+        self.assertEqual(mock_class.call_count, 2)
+
+if __name__ == '__main__':
+    unittest.main()
