@@ -1,1 +1,31 @@
 
+def test_set_package_raises_validation_exception(provider_config):
+    provider = "public"
+    package = "datazone"
+    
+    onboarder = CatalogPayloadRenderer(provider=provider, package=package)
+    onboarder.set_provider(provider_config)
+
+    # Simulate a validation error scenario by patching the CatalogPackageModel's validation
+    with patch('CatalogPackageModel.__init__', side_effect=ValidationException([{
+        'type': 'value_error.any_str.min_length',
+        'ctx': {'limit_value': 3}
+    }, {
+        'type': 'value_error.regex',
+        'ctx': {'pattern': '^[A-Z]+$'}
+    }])) as mock_validation:
+        
+        # Attempt to set the package and catch the ValidationException
+        with pytest.raises(ValidationException) as excinfo:
+            onboarder.set_package({'name': 'A', 'data_captain_team': 'Team'})
+        
+        # Verify the validation exception is raised
+        assert excinfo.type is ValidationException
+
+        # Verify the formatted error messages are correctly included in the exception
+        expected_error_messages = [
+            "Should have a minimum length of 3.",
+            "Invalid pattern. Expected pattern: ^[A-Z]+."
+        ]
+        assert excinfo.value.errors == expected_error_messages
+
