@@ -28,4 +28,4 @@ def test_set_package_raises_validation_exception(provider_config):
             "Invalid pattern. Expected pattern: ^[A-Z]+."
         ]
         assert excinfo.value.errors == expected_error_messages
-
+https://semaphoreci.com/community/tutorials/testing-python-applications-with-pytest#h-using-pytest-fixtures
