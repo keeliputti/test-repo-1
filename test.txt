@@ -1,15 +1,1 @@
-@pytest.mark.parametrize("validation_errors,expected_messages", [
-    # Define your parameterized cases...
-])
-def test_set_validation_errors(provider_config, pfig, validation_errors, expected_messages):
-    provider = "public"
-    package = "dae"
-    
-    onboarder = C---r(provider=provider, package=package)
-    onboarder.sovider(provider_config)
-    
-    with patch.object(C-----r, 'setackage', side_effect=ValidationException(errors=validation_errors)):
-        with pytest.raises(ValidationException) as exc_info:
-            onboarder.seackage(package_config)
-        
-        assert exc_info.value.args[1] == expected_messages, f"Expected {expected_messages}, got {exc_info.value.args[1]}"
+
