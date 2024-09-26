@@ -1,38 +1,3 @@
-import pytest
-
-def test_package_translation_with_validation_exception(provider_config, package_config):
-    provider = "public"
-    package = "datazone"
-
-    # Initialize CatalogPayloadRenderer
-    onboarder = CatalogPayloadRenderer(provider=provider, package=package)
-    onboarder.set_provider(provider_config)
-    
-    # Modify package_config to trigger validation exception
-    invalid_package_config = package_config.copy()
-    invalid_package_config["name"] = ""  # Assume empty name triggers a validation error
-
-    # Mock a ValidationException with some errors
-    validation_errors = [
-        {"type": "value_error.missing", "loc": ["name"], "msg": "field required", "ctx": {}},
-        {"type": "value_error.any_str.min_length", "loc": ["description"], "msg": "too short", "ctx": {"limit_value": 10}}
-    ]
-    
-    with pytest.raises(ValidationException) as excinfo:
-        onboarder.set_package(invalid_package_config)
-
-    # Extract the error messages from the exception
-    expected_error_messages = [
-        "Mandatory field is missing.",
-        "Should have a minimum length of 10."
-    ]
-
-    # Ensure the exception contains the formatted error messages
-    assert excinfo.value.args[1] == expected_error_messages
-
-    # Additionally, check the top-level error message
-    assert excinfo.value.args[0] == "AssetHierarchy-package.value"
-
 https://semaphoreci.com/community/tutorials/testing-python-applications-with-pytest#h-using-pytest-fixtures
 https://jamescooke.info/arrange-act-assert-pattern-for-python-developers.html
 
