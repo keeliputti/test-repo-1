@@ -125,3 +125,15 @@ public class ArrowSerialization {
     // Send serializedBytes to the server
   }
 }
+
+
+
+① signed up to a new app Es agreed to let it automatically Bource now contacts / other data via your google acc?
+
+e.g. LinkedIn -impouls your Google comlacks & invites them to connect with you
+
+Back m the days - Med. Hope they do nothing else. anstfor such Google pops So 950 eg. Spotly. up message audisuels to Google s logom, Is it okay to shore dubads with chity/Lunkuld?" & by on by authorizang occus to your outrostalonkachs, you allow Lmkwlod/spthity your to b. half.C & nothing move).
+
+OIDC mto picture! OAuth doesn't mhorently address IDC ensures logging in, erc) Usir autfunticchim. Spehly akionos astro gorexactly shars It is bakd on mold hoden-(name,cmat, - Personalee your exponere.
+
+→ aps shu doesn't Onbeared to M2
