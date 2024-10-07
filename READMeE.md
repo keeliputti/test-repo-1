@@ -102,3 +102,5 @@ Reflecting on my goals set at the beginning of the year, I have made significant
 
 5. **Proof of Concept on Serialization**: I explored a proof of concept for serialization in the dzjava store API. Although it wasn’t prioritized, it contributed to my learning.
 
+
+Strengthen ownership of my PRs by proactively addressing potential issues that could lead to outages, and continuously improving from past challenges to ensure smoother deployments."
