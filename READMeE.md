@@ -1,25 +1,29 @@
-Here’s a way to express these points for your review of Jigar, incorporating the example you provided:
+Here's how you can reframe and map your feedback for Aditya according to the parameters you mentioned:
 
 ---
 
-**Empowers me to make decisions about my work, when appropriate:**  
-Jigar consistently empowers me to take ownership of my tasks, allowing me to make key decisions. A great example of this was when he identified the opportunity in the dzjava client space and entrusted me with the responsibility, despite my background primarily being in Python. His confidence in my abilities, even across different languages, enabled me to expand my skill set and contribute to the project with autonomy.
+### **Aditya's Review**  
 
-**Provides actionable feedback that helps me improve my performance:**  
-Jigar offers constructive feedback that is both clear and actionable. He regularly checks in to discuss performance in a way that highlights areas for growth while reinforcing my strengths. This approach has been instrumental in helping me develop my skills and refine my contributions to the team.
+Aditya has been an outstanding addition to the team, making significant contributions across several projects. Working with him has been both enjoyable and productive.
 
-**Creates a team environment where I feel comfortable voicing opinions, escalating concerns, or reporting mistakes:**  
-Jigar fosters an inclusive and supportive team culture where open communication is encouraged. I feel comfortable raising concerns or discussing challenges without hesitation, knowing that Jigar values transparency and is focused on solutions. He actively listens and ensures that the team’s voices are heard, particularly during key discussions or post-mortem meetings.
+- **Takes Accountability**  
+  Aditya consistently identifies issues and takes ownership of projects independently. His proactive nature and focused work ethic have made a substantial impact, particularly in Config-Service. He was instrumental in designing and implementing both the setter and getter endpoints.
 
-**Supports me in prioritizing my personal commitments and well-being:**  
-Jigar shows a genuine understanding of the importance of balancing work and personal commitments. He encourages the team to manage workload effectively and supports flexibility when needed, which has allowed me to maintain a healthy work-life balance.
+- **Contributes to Overall Team / Business Results**  
+  His work on versioning datasets and partitioning in Config-Service has been crucial. His contributions, such as adding a Zookeeper lock while writing to GPFS, earned praise from Lakshmi for its efficiency and smart design. This shows his ability to deliver practical solutions that balance both Firm and client needs.
 
-**Acts transparently and shares relevant information from their manager and senior leaders:**  
-Jigar is highly transparent in sharing updates and directives from leadership. He makes it a point to ensure that the team is informed of key decisions and changes. His open communication style has helped align the team with broader organizational goals.
+- **Works Collaboratively with Others**  
+  Aditya fosters a collaborative environment, often assisting colleagues like Pallavi with Unit Tests, and working with me on resolving client issues related to Buckets. His deep understanding of library vs service dynamics has been particularly useful, notably in his contributions to `departs-config-manager`.
 
-**Coaches me in my career:**  
-Jigar has been a proactive mentor, providing me with opportunities to grow in my role. Whether it’s guiding me through a new project like dzjava or offering advice on technical challenges, he has been instrumental in shaping my professional development. He ensures that I am given the right opportunities to expand my skill set and take on new challenges.
+- **Delivers Solutions That Balance Firm and Stakeholders' Needs**  
+  One of his key achievements was enabling the store endpoint for native datasets, which provided significant value to Java users. He has also been crucial in ensuring error handling is comprehensive and robust across the Config-Service.
+
+- **Contributes to an Inclusive and Diverse Work Environment**  
+  Aditya actively supports his colleagues, offering guidance to junior team members, and his openness to sharing knowledge makes him a valuable asset to the team.
+
+- **Constructive Feedback**  
+  Aditya’s learning curve and growth have been impressive. Moving forward, I’d encourage him to continue nurturing his passion for learning by taking up technical courses to sharpen his skills even further. Identifying a domain that aligns with his interests will help guide his career growth.
 
 ---
 
-This captures how Jigar has been supportive in various aspects of your professional development, giving specific examples that highlight his leadership and mentorship. Let me know if you'd like to refine any of these points further!
+This review is succinct while covering the relevant parameters with clarity and examples. Let me know if you need any adjustments!
