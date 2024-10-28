@@ -1,175 +1,128 @@
 import argparse
 import json
 import logging
-from enum import Enum
 from jinja2 import Template
+import ast
 import time
 import requests
+import glob
 
 # Initialize logger
 logger = logging.getLogger(__name__)
 
-# Environment Enum
-class EnvEnum(str, Enum):
-    dev = "dev"
-    qa = "qa"
-    prod = "prod"
+class ConfigurationFetcher:
+    def __init__(self, env):
+        self.env = env
 
-# HTTPService Class to Encapsulate Requests
-class HTTPService:
-    def __init__(self, timeout=300):
-        self.timeout = timeout
-
-    def get(self, url: str):
+    def fetch_datasets_config(self, package_id):
+        provider, package = package_id.split("/")
+        url = f"http://datazone-metazone-service-{self.env}-ms.com/v2/datasets/hierarchy?fully_qualified_name={provider}/{package}"
+        
         try:
-            response = requests.get(url, timeout=self.timeout)
-            response.raise_for_status()
-            if response.encoding is None:
-                response.encoding = 'utf-8'
-            return response.json()
-        except requests.RequestException as ex:
-            logger.error(f"HTTP request error: {ex}")
-            raise
+            resp = self._make_request(url)
+        except requests.exceptions.RequestException as ex:
+            logger.error(f"Failed to fetch config for {package_id}: {ex}")
+            raise Exception(f"Failed after retries for {url}")
+        
+        return self._parse_response(resp)
 
-# Base Class for Assets
-class BaseAsset:
-    def __init__(self, config: dict, env: str):
-        self.config = config
-        self.env = env
-        self.name = config.get("displayName")
-        self.description = config.get("description")
+    def _make_request(self, url, retry_delay=480):
+        try:
+            resp = requests.get(url, timeout=300)
+            resp.raise_for_status()
+            return resp
+        except (requests.exceptions.ConnectionError, requests.exceptions.Timeout) as ex:
+            logger.warning(f"Request failed: {ex}. Retrying after {retry_delay} seconds...")
+            time.sleep(retry_delay)
+            return requests.get(url)
 
-# Provider Class
-class Provider(BaseAsset):
-    def __init__(self, config: dict, env: str):
-        super().__init__(config, env)
-        self.provider_id = config.get("fullyQualifiedName")
-        self.packages = [Package(pkg_config, env) for pkg_config in config.get("packages", [])]
-
-    def process_packages(self):
-        for package in self.packages:
-            package.process_datasets()
-
-# Package Class
-class Package(BaseAsset):
-    def __init__(self, config: dict, env: str):
-        super().__init__(config, env)
-        self.package_id = config.get("fullyQualifiedName")
-        self.datasets = [Dataset(ds_config, env) for ds_config in config.get("datasets", [])]
-
-    def process_datasets(self):
-        for dataset in self.datasets:
-            dataset.process_code_access_meta()
-
-# Dataset Class
-class Dataset(BaseAsset):
-    def __init__(self, config: dict, env: str):
-        super().__init__(config, env)
-        self.dataset_id = config.get("fullyQualifiedName")
-        self.code_access_meta = config.get("codeAccessMeta", {})
-        self.code_access_protocol = config.get("codeAccessProtocol", {})
-
-    def process_code_access_meta(self):
-        template_str = json.dumps(self.code_access_meta)
-        file = Template(template_str)
-        context = self.code_access_protocol.get("common", {})
-        context.update(self.code_access_protocol.get(self.env.lower(), {}))
-        self.code_access_meta = json.loads(file.render(context))
-
-# Config Store Interface
-class ConfigStoreInterface:
-    def __init__(self, store_path: str):
-        self.store_path = store_path
-
-    def write(self, key: str, data: dict):
-        # Implement logic to save data to the configuration store
-        pass
-
-# Main Processor Class
-class DatasetConfigProcessor:
-    def __init__(self, env: EnvEnum, team_dznode: str):
-        self.env = env
-        self.team_dznode = team_dznode
-        self.http_service = HTTPService()
-
-    def download(self, package_id: str):
-        url = f"http://datazone-metazone-service-{self.env}-ms.com/v2/datasets/hierarchy?fully_qualified_name={package_id}"
-        response = self.http_service.get(url)
-        provider_config = response['dataSetHierarchy']['dataSetProviders'][0]
-        package_config = provider_config['packages'][0]
-        datasets_configs = package_config['datasets']
+    def _parse_response(self, resp):
+        resp.encoding = resp.encoding or 'utf-8'
+        data = resp.json()
+        
+        package_config = data['dataSetHierarchy']['dataSetProviders'][0]['packages'][0]
+        datasets_configs = package_config.pop('datasets', [])
+        provider_config = data['dataSetHierarchy']['dataSetProviders'][0]
+        
         return provider_config, package_config, datasets_configs
 
-    def convert_to_config_store_format(self, provider_config, package_config, dataset_config):
-        """
-        Transforms provider, package, and dataset configs to the format required by the config store.
-        """
+class ConfigurationProcessor:
+    @staticmethod
+    def convert_to_config_store_format(provider_config, package_config, dataset_config):
         configurations = {
-            key: self.map_catalog_configuration(config, key) 
-            for key, config in zip(['provider', 'package', 'dataset'], 
-                                   (provider_config, package_config, dataset_config))
+            key: ConfigurationProcessor._map_catalog_configuration(config, key) 
+            for key, config in zip(['provider', 'package', 'dataset'], (provider_config, package_config, dataset_config))
         }
-        
-        # Adjust identifiers for nested configurations
+
         configurations['package']['package_id'] = f"{configurations['provider']['provider_id']}/{configurations['package']['package_id']}"
         configurations['dataset']['dataset_id'] = f"{configurations['package']['package_id']}/{configurations['dataset']['dataset_id']}"
 
-        # Process codeAccessMeta using Jinja templating if available
-        if 'codeAccessMeta' in dataset_config and isinstance(dataset_config['codeAccessMeta'], dict):
-            logger.info(f"Processing dataset: {dataset_config.get('fullyQualifiedName')}")
-            code_access_protocol = dataset_config.get('codeAccessProtocol', {})
-            
-            if code_access_protocol.get(self.env):
-                template_str = json.dumps(dataset_config['codeAccessMeta'])
-                file = Template(template_str)
-                context = code_access_protocol[self.env]
-                dataset_config['codeAccessMeta'] = json.loads(file.render(context))
-
-            configurations['dataset'].update(dataset_config['codeAccessMeta'])
+        code_access_meta = dataset_config.get('codeAccessMeta', {})
+        if isinstance(code_access_meta, dict) and code_access_meta:
+            env_config = dataset_config.get('codeAccessProtocol', {}).get(args.env)
+            if env_config:
+                template = Template(json.dumps(code_access_meta))
+                configurations['dataset'].update(json.loads(template.render(env_config)))
         else:
             configurations['dataset'] = None
 
         return configurations['provider'], configurations['package'], configurations['dataset']
 
-    def process(self, provider_config, package_config, datasets_configs):
-        provider = Provider(provider_config, self.env)
-        for dataset_config in datasets_configs:
-            # Convert to the config store format
-            provider_fmt, package_fmt, dataset_fmt = self.convert_to_config_store_format(
-                provider_config, package_config, dataset_config
-            )
-            self.save_to_config_store(provider_fmt, package_fmt, dataset_fmt)
-
-    def save_to_config_store(self, provider_config, package_config, dataset_config):
-        config_store = ConfigStoreInterface("/var/temp/accessible/")
-        if provider_config:
-            config_store.write(provider_config['provider_id'], provider_config)
-        if package_config:
-            config_store.write(package_config['package_id'], package_config)
-        if dataset_config:
-            config_store.write(dataset_config['dataset_id'], dataset_config)
-
-    def map_catalog_configuration(self, config, key):
-        """
-        Placeholder for custom mapping logic of catalog configuration data.
-        Adjust this method as needed to match desired structure for each type.
-        """
-        # Mapping logic for each configuration type can go here
+    @staticmethod
+    def _map_catalog_configuration(config, config_type):
+        # Placeholder for actual configuration mapping logic
         return config
 
-# Main Execution
-if __name__ == "__main__":
+class ConfigurationWriter:
+    def __init__(self, config_store_interface):
+        self.config_store_interface = config_store_interface
+
+    def write(self, provider_config, package_config, dataset_config):
+        try:
+            self.config_store_interface.set_provider_config(provider_config['provider_id'], provider_config)
+        except Exception as ex:
+            logger.exception(f"Failed to write provider config: {ex}")
+        
+        try:
+            self.config_store_interface.set_package_config(package_config['package_id'], package_config)
+        except Exception as ex:
+            logger.exception(f"Failed to write package config: {ex}")
+
+        if dataset_config:
+            try:
+                self.config_store_interface.set_dataset_config(dataset_config['dataset_id'], dataset_config)
+            except Exception as ex:
+                logger.exception(f"Failed to write dataset config: {ex}")
+
+class TeamDznodePackagesFetcher:
+    @staticmethod
+    def get_team_dznode_packages(env, team_dznode):
+        team_dznode_packages = []
+        for provider, package in [
+            x.split("/")[-2:] for x in glob.glob(
+                f"/ms/dist/datazone/PROJ/dzdata.accessible/{env}/accessible_dataset/{env}/dznode/data/providers/*/*"
+            ) if not x.endswith("-py")
+        ]:
+            team_dznode_packages.append(f"{provider}/{package}")
+        return team_dznode_packages
+
+def main():
     parser = argparse.ArgumentParser(description='Dataset to config store app', add_help=True)
     parser.add_argument("-env", "--environment", dest="env", required=True, help="Environment to release", type=str)
     parser.add_argument("-name", "--team_dznode", dest="name", required=True, default="community", help="Team dznode name", type=str)
-
     args = parser.parse_args()
-    env = EnvEnum(args.env)
-    team_dznode = args.name
 
-    processor = DatasetConfigProcessor(env, team_dznode)
-    team_dznode_packages = []  # Implement your logic to fetch package IDs here
-
+    fetcher = ConfigurationFetcher(args.env)
+    writer = ConfigurationWriter(ConfigStoreInterface(GPFSConfigStore(root_path="var/temp/accessible/")))
+    
+    team_dznode_packages = TeamDznodePackagesFetcher.get_team_dznode_packages(args.env, args.name)
+    
     for package_id in team_dznode_packages:
-        provider_config, package_config, datasets_configs = processor.download(package_id)
-        processor.process(provider_config, package_config, datasets_configs)
+        provider_config, package_config, datasets_configs = fetcher.fetch_datasets_config(package_id)
+        
+        for dataset_config in datasets_configs:
+            provider, package, dataset = ConfigurationProcessor.convert_to_config_store_format(provider_config, package_config, dataset_config)
+            writer.write(provider, package, dataset)
+
+if __name__ == "__main__":
+    main()
