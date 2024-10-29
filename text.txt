@@ -1,6 +1,4 @@
-
-It’s been impressive to see how keen she is to learn and grow. When we worked together on writing test cases, she showed a strong willingness to understand the purpose behind each step. She often took the initiative to try things on her own, and her positive attitude shone through as she tackled each challenge.
-
-I’ve also noticed her confidence steadily increasing over time. Her writing skills are commendable, as seen in her Jive post about the Apprenticeship program—it was clear, thoughtful, and well-articulated. Additionally, she manages her responsibilities effectively, balancing her work here with her college commitments. She’s open to trying new approaches without hesitation, which is a great quality for continuous learning and adaptability.
-
-I’d encourage her to keep experimenting with smaller versions of anything new she learns here. For instance, she could try writing test cases for various Python functions, which could be a great way to deepen her understanding and build confidence.
+for final_configs in config_processor.process_configs(package):
+        provider_config = final_configs.get(config_processor.prov.provider_id)
+        package_config = final_configs.get(config_processor.pack.package_id)
+        dataset_config = final_configs.get(config_processor.dataset.dataset_id)
