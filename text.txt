@@ -1,4 +1,58 @@
-for final_configs in config_processor.process_configs(package):
-        provider_config = final_configs.get(config_processor.prov.provider_id)
-        package_config = final_configs.get(config_processor.pack.package_id)
-        dataset_config = final_configs.get(config_processor.dataset.dataset_id)
+import unittest
+from unittest.mock import patch, MagicMock
+
+class TestDZNodeFunctions(unittest.TestCase):
+
+    @patch('dznode.dzcontext.DZContext')
+    def test_get_team_dznode_proid(self, MockDZContext):
+        # Mocking the get_proids_config method
+        MockDZContext.instance.get_proids_config.return_value = {
+            'team1': {'repo': ['repo1', 'repo2'], 'context_override': ['dev', 'prod']},
+            'team2': {'repo': ['repo2'], 'context_override': ['qa']},
+            'team3': {'repo': ['repo3'], 'context_override': ['dev', 'qa', 'prod']}
+        }
+
+        # Expected output for the repo_name 'repo2'
+        expected_output = {
+            'team1': {
+                'dev': ['context_override'],
+                'prod': ['context_override']
+            },
+            'team2': {
+                'qa': ['context_override']
+            }
+        }
+
+        result = get_team_dznode_proid('repo2')
+        self.assertEqual(result, expected_output)
+
+    @patch('dznode.dzcontext.DZContext')
+    @patch('dz.util.normalize_pkd')
+    def test_filter_datasets_served_by_team_dznode(self, mock_normalize_pkd, MockDZContext):
+        # Mocking environment variable and method behavior
+        os.environ["CONFIG_OVERRIDE_NAME"] = 'team1'
+        MockDZContext.instance.get_config_override_name.return_value = 'team1'
+        MockDZContext.instance.get_routing_override.return_value = {'some_key': 'some_value'}
+
+        # Mocking normalize_pkd to return mock values
+        mock_normalize_pkd.return_value = ('provider1', 'package1', None)
+
+        # Creating an instance of InclusionExclusionProviderPackage
+        mock_condition = MagicMock()
+        mock_condition.check.return_value = True
+
+        # Mocking the InclusionExclusionProviderPackage constructor
+        with patch('dznode.model.cache.dataset_cache.InclusionExclusionProviderPackage', return_value=mock_condition):
+            dataset = 'dataset1'
+            team_dznode_datasets = ['dataset2']
+
+            # Call the function
+            result = filter_datasets_served_by_team_dznode('team1', dataset, team_dznode_datasets)
+
+            # Check the result
+            self.assertIn('dataset1', result)
+            self.assertIn('dataset2', result)
+            self.assertEqual(len(result), 2)
+
+if __name__ == '__main__':
+    unittest.main()
