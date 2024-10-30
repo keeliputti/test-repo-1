@@ -1,58 +1,57 @@
+import pytest
 import unittest
-from unittest.mock import patch, MagicMock
+from unittest.mock import patch, mock_open
+from datazone.parts.domain.data_model.catalog.descriptions.catalog_descriptions import (
+    read_description, get_catalog_mapping, map_catalog_configuration
+)
 
-class TestDZNodeFunctions(unittest.TestCase):
-
-    @patch('dznode.dzcontext.DZContext')
-    def test_get_team_dznode_proid(self, MockDZContext):
-        # Mocking the get_proids_config method
-        MockDZContext.instance.get_proids_config.return_value = {
-            'team1': {'repo': ['repo1', 'repo2'], 'context_override': ['dev', 'prod']},
-            'team2': {'repo': ['repo2'], 'context_override': ['qa']},
-            'team3': {'repo': ['repo3'], 'context_override': ['dev', 'qa', 'prod']}
+class TestReadDescription:
+    mock_file_content = '{"test_key2_a": "test_value_a"}'
+    
+    def test_read_description(self):
+        self.mock_descriptions = {
+            "test_key2_a": "test_value_a"
         }
+        with patch(
+            'builtins.open', 
+            new=mock_open(read_data=self.mock_file_content), 
+            create=True
+        ):
+            assert read_description("dummy").get("test_key2_a") == self.mock_descriptions.get("test_key2_a")
+    
+    def test_get_catalog_mapping(self):
+        self.mock_descriptions_catalog = '''
+        {
+            "provider": {"test_key2_a": "test_value_a"},
+            "package": {"test_key2_b": "test_value_b"},
+            "dataset": {"test_key2_c": "test_value_c"}
+        }
+        '''
+        with patch(
+            'builtins.open', 
+            new=mock_open(read_data=self.mock_descriptions_catalog), 
+            create=True
+        ):
+            assert get_catalog_mapping("provider").get("test_key2_a") == "test_value_a"
 
-        # Expected output for the repo_name 'repo2'
+    def test_map_catalog_configuration(self):
+        # Mock the return of get_catalog_mapping to provide a predefined mapping
+        mock_mapping = {"desired_key_1": "config_key_1", "desired_key_2": "config_key_2"}
+        
+        # Mocked configuration that should match the mock_mapping keys
+        mock_configuration = {
+            "config_key_1": "value_1",
+            "config_key_2": "value_2",
+            "config_key_3": "value_3"  # This should be ignored
+        }
+        
         expected_output = {
-            'team1': {
-                'dev': ['context_override'],
-                'prod': ['context_override']
-            },
-            'team2': {
-                'qa': ['context_override']
-            }
+            "desired_key_1": "value_1",
+            "desired_key_2": "value_2"
         }
 
-        result = get_team_dznode_proid('repo2')
-        self.assertEqual(result, expected_output)
+        with patch('datazone.parts.domain.data_model.catalog.descriptions.catalog_descriptions.get_catalog_mapping', return_value=mock_mapping):
+            assert map_catalog_configuration(mock_configuration, "provider") == expected_output
 
-    @patch('dznode.dzcontext.DZContext')
-    @patch('dz.util.normalize_pkd')
-    def test_filter_datasets_served_by_team_dznode(self, mock_normalize_pkd, MockDZContext):
-        # Mocking environment variable and method behavior
-        os.environ["CONFIG_OVERRIDE_NAME"] = 'team1'
-        MockDZContext.instance.get_config_override_name.return_value = 'team1'
-        MockDZContext.instance.get_routing_override.return_value = {'some_key': 'some_value'}
-
-        # Mocking normalize_pkd to return mock values
-        mock_normalize_pkd.return_value = ('provider1', 'package1', None)
-
-        # Creating an instance of InclusionExclusionProviderPackage
-        mock_condition = MagicMock()
-        mock_condition.check.return_value = True
-
-        # Mocking the InclusionExclusionProviderPackage constructor
-        with patch('dznode.model.cache.dataset_cache.InclusionExclusionProviderPackage', return_value=mock_condition):
-            dataset = 'dataset1'
-            team_dznode_datasets = ['dataset2']
-
-            # Call the function
-            result = filter_datasets_served_by_team_dznode('team1', dataset, team_dznode_datasets)
-
-            # Check the result
-            self.assertIn('dataset1', result)
-            self.assertIn('dataset2', result)
-            self.assertEqual(len(result), 2)
-
-if __name__ == '__main__':
-    unittest.main()
+if __name__ == "__main__":
+    pytest.main()
