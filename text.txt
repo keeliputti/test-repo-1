@@ -1,1 +1,5 @@
+I reviewed Aditya’s PRs on enabling parallel storage of bucket configs to the config store. It looks nearly complete and is just awaiting approvals.
 
+The first step before enabling this feature would be migrating the existing configs. Pallavi’s changes have been merged, so I’ll check with her to see what’s left.
+
+I also spoke with Aditya, and he’s aiming to wrap this up by Thursday.
