@@ -1,9 +1,2 @@
-def setUp(self):
-        """Set up a DatasetDiffChecker instance for testing."""
-        self.mail_to = "keeliput"
-        self.env = "prod"
-        self.dataset_diff_checker = DatasetDiffChecker(
-            mail_to=self.mail_to,
-            env=self.env,
-            pull_datasets_from_fdc=MagicMock()
-        )
+@patch.object(DatasetDiffChecker, 'env', new_callable=MagicMock)
+mock_env.return_value = "prod" 
