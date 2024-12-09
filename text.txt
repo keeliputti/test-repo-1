@@ -1,2 +1,26 @@
-@patch.object(DatasetDiffChecker, 'env', new_callable=MagicMock)
-mock_env.return_value = "prod" 
+import threading
+import requests
+
+def test_thread_safety():
+    url = "http://localhost:8000/set_config"
+    headers_list = [
+        {"Authorization": "Bearer user1-token"},
+        {"Authorization": "Bearer user2-token"},
+        {"Authorization": "Bearer user3-token"},
+    ]
+    
+    def make_request(headers):
+        response = requests.post(url, headers=headers, json={"key": "value"})
+        print(f"Response for {headers['Authorization']}: {response.json()}")
+
+    threads = []
+    for headers in headers_list:
+        thread = threading.Thread(target=make_request, args=(headers,))
+        threads.append(thread)
+        thread.start()
+
+    for thread in threads:
+        thread.join()
+
+# Run the test
+test_thread_safety()
