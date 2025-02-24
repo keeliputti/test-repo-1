@@ -1,11 +1,1 @@
 
-It's a Bucket Dataset, and the necessary configurations have been added.
-
-While debugging locally, I found that the provider object creation fails because it isn't found in PROVIDER_BASE_PATH: <link>.
-
-My question is—do we support sample data for buckets at all? I noticed that on failure to initialize the Provider object, a Bucket object is initialized instead (within a try-except block): <link>.
-
-Looking forward to clarification.
-
-Thanks,
-[Your Name]
