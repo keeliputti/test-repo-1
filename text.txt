@@ -1,47 +1,12 @@
-Yes, I can show you how the error might occur and explain it in more detail.
+While upgrading msjava/parts & Gradle, my build and tests passed, but the deployment failed due to:
 
-Here’s a small example that reproduces the error:
+Train contract validation failure: <link>
+Error: VMS:ossjava/hadoop/2.7.4 - Security validation result is ERROR.
 
-### Code to reproduce the error:
+This issue is unrelated to my changes—all deployments are blocked due to a policy update (<Jive doc link>), which marks certain packages as failing builds since Feb 14, 2025.
 
-```python
-import pandas as pd
+Upgrading a package in VMS takes 2-3 months due to MSDE’s limited support for the manual process. After discussing with Application Infrastructure, we concluded that fetching dependencies from Artifactory is the best solution.
 
-# Create a DataFrame with an incomplete date format (e.g., day and month but missing year)
-data = {'date': ['12/01', '15/03', '23/05']}
-df = pd.DataFrame(data)
+To address this, I’ve enabled dual-dependencies for dzjava and validated it with clean builds (snippet attached). Requesting approval for this approach: <PR link>.
 
-# Attempt to convert the 'date' column to datetime
-df['date'] = pd.to_datetime(df['date'])
-```
-
-### Explanation:
-In this case, the date format `12/01` represents the day and month, but it lacks the year component. When you try to use `pd.to_datetime` on this data without specifying the year, Pandas doesn't know how to interpret the incomplete date. This results in the error message:
-
-```
-ValueError: to assemble mappings requires at least that [year, month, day] be specified: [day, month, year] is missing
-```
-
-### How to fix it:
-You would need to either:
-1. **Ensure the date has all required components** (year, month, and day), or
-2. **Specify a default year** or a custom format that includes the missing component.
-
-For example, you could fix the issue by assuming a default year for the incomplete dates:
-
-```python
-# Adding a default year, e.g., 2025, to the incomplete date format
-df['date'] = pd.to_datetime(df['date'] + '/2025', format='%d/%m/%Y')
-```
-
-This would resolve the issue and successfully convert the date column.
-
-
-
-insert_job: half_hourly_job_name
-job_type: c
-command: <your_command_here>
-machine: <your_machine_name>
-start_times: "00:00,00:30,01:00,01:30,02:00,02:30,03:00,03:30,04:00,04:30,05:00,05:30,06:00,06:30,07:00,07:30,08:00,08:30,09:00,09:30,10:00,10:30,11:00,11:30,12:00,12:30,13:00,13:30,14:00,14:30,15:00,15:30,16:00,16:30,17:00,17:30,18:00,18:30,19:00,19:30,20:00,20:30,21:00,21:30,22:00,22:30,23:00,23:30"
-run_calendar: all_days
-timezone: GMT
+Once deployed, we’ll test the latest dzjava artifact before sharing it with the client.
