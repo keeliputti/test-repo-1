@@ -1,12 +1,1 @@
-While upgrading msjava/parts & Gradle, my build and tests passed, but the deployment failed due to:
 
-Train contract validation failure: <link>
-Error: VMS:ossjava/hadoop/2.7.4 - Security validation result is ERROR.
-
-This issue is unrelated to my changes—all deployments are blocked due to a policy update (<Jive doc link>), which marks certain packages as failing builds since Feb 14, 2025.
-
-Upgrading a package in VMS takes 2-3 months due to MSDE’s limited support for the manual process. After discussing with Application Infrastructure, we concluded that fetching dependencies from Artifactory is the best solution.
-
-To address this, I’ve enabled dual-dependencies for dzjava and validated it with clean builds (snippet attached). Requesting approval for this approach: <PR link>.
-
-Once deployed, we’ll test the latest dzjava artifact before sharing it with the client.
