@@ -1,13 +1,1 @@
 
-Hi Jeffrey,
-
-The dzjava release is currently blocked due to Train Contract Validation failures on a few dependencies. We are actively working to resolve these as we proceed.
-
-Thank you for sharing the list of dependencies requiring an upgrade. We are processing these alongside the broader dependency updates. One example of the Train Contract Validation failure can be found here: [link].
-
-Additionally, in the upcoming release, we will be transitioning from fetching dependencies from VMS to Artifactory to mitigate certain dependency-related failures.
-
-I will keep you posted on progress. Let me know if you need any further details in the meantime.
-
-Best,
-Supriya
