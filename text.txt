@@ -1,12 +1,1 @@
-For better readability in Jive, bullet points would be a good idea. Here’s how you can structure it:  
 
-**dzjava Release Blocker: Dependency Issues**  
-
-- Any developments or changes in dzjava **cannot be released** or provided as a new version.  
-- Clients using **older dzjava versions remain unaffected**.  
-- **Dependency fetching:**  
-  - The latest version (**2025.03.03**) fetches dependencies from **Artifactory**.  
-  - Previous versions fetch dependencies from **AFS**.  
-- Some users had to **manually add certain dependencies**, even for AFS-based versions, as JAR files do not include the libraries they ship with.  
-
-This keeps it clear and scannable. Let me know if you need further refinements!
