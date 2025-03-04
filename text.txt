@@ -1,1 +1,15 @@
 
+The latest version (2025.03.03) fetches dependencies from Artifactory, but some clients may still face issues as they continue fetching dependencies from AFS.
+Switching back to AFS is not an option, as it leads to Train Contract Validation failures due to a policy update ([link]), preventing any new releases with AFS dependencies.
+Clients using older dzjava versions remain unaffected.
+Some users had to manually add certain dependencies, even for AFS-based versions, as JAR files do not include the libraries they ship with.
+
+Impact
+The latest releases fetch dependencies from Artifactory, but some clients may still face issues as they are fetching dependencies from AFS.
+Switching back to AFS is not an option, as it leads to Train Contract Validation failures due to a policy update ([link]). Hence, no new release can be made with dependencies fetched from AFS.
+Clients using older dzjava versions remain unaffected.
+Dependency Fetching Overview:
+
+The latest version (2025.03.03) fetches dependencies from Artifactory.
+Previous versions fetch dependencies from AFS.
+Some users had to manually add certain dependencies, even for AFS-based versions, as JAR files do not include the libraries they ship with.
