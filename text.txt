@@ -1,17 +1,32 @@
-Here’s a more concise and professional version of your message:  
+Got it, Supriya! Here's a more direct and professional version of your announcement, with your preferences and suggestions incorporated:
 
----  
+---
 
-**Subject:** Aligning on dzjava Release Issues & Next Steps  
+**Subject:** Accessible Dataset Configuration Now Fetched from Config Service in QA
 
-Bringing everyone up to speed on the dzjava release challenges due to Train Contract Validation errors.  
+Hi Team,
 
-- **Issue:** dzjava, published as a library to AFS, fails deployment due to a Train Contract Validation error linked to **VMS: ossjava/hadoop/2.7.4**, requiring an upgrade. Since no newer version exists in **msjava/parts**, we initially opted to fetch dependencies from Artifactory.  
-- **Infra Guidance:** App Infra advised that AFS-deployed libraries must rely solely on AFS dependencies. To address this, I’ve raised a **Snack request for VMS: ossjava/hadoop 2.7.4**.  
-- **Next Steps:** Nido suggests testing with the latest released version for early feedback. Additionally, we could try an earlier version of **ossjava/hadoop** (not listed in the blocked policy) to see if it passes Train Contract Validation.  
+We’ve completed the migration of **Accessible Community Dataset configurations to Config Service** in the QA environment.
 
-Would appreciate thoughts on this approach, especially from Nido.  
+As part of this change:
+- Configurations are **now stored in Config Service (`config_store`)**, in addition to the existing AFS location, with every non-prod Accessible deployment.  
+  *(Previously, these were stored only in the AFS location.)*
+- Configuration fetching has been switched from **AFS to Config Service**.
 
----  
+We’ve tested a few datasets in QA and things look good so far. I’ll continue to monitor **datazone-help** for any issues or feedback related to this change.
 
-This keeps it to the point while maintaining clarity and professionalism. Let me know if you’d like any refinements!
+We intend to keep these changes in QA for a week before moving to PROD.
+
+For reference, please find:
+- [JIVE doc](#)
+- [PR](#) for enabling fetch from `config_store`
+
+🔁 **To revert to the earlier setup**:  
+Increase the monitor count for `dznode.dzaccessible` nodes in the respective environment.
+
+🔁 Rollback Info:
+In case we need to revert to the previous behavior, please increase the monitor count for dznode.dzaccessible nodes in the respective environment.
+
+—
+
+Let me know if you'd like to include dataset names or expected PROD timelines.
