@@ -1,3 +1,1 @@
-We suspect the issue is due to the 'st role' not being set in your Snowflake configuration.
-
-Could you please try specifying it and see if that resolves the problem? You can refer to dzc get dataset config (recipes/config-service/snowflake, config type: "config-service") for guidance on setting the configurations correctly.
+Currently, there is no pagination support, including at the dznode service level for GET APIs.
