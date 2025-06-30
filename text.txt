@@ -21,4 +21,6 @@ Supriya
 ---
 
 Let me know if you'd like to tone it down further or shorten it.
+As part of this stage, we compare the payload from the current release against the previously released version to identify any differences. If changes are detected, the updated payload is pushed to the MetaZone via the v2/metadata/ endpoint.
+
 
