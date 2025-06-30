@@ -1,26 +1,3 @@
-Got it! Here's an updated and more precise version of the email reflecting that:
-
----
-
-**Subject:** Clarification on STO Process and 25th June Deployment Failure
-
-Hi Ehoussou,
-
-You’re right — the datasets in question belong to the `dz.ied` repository. The STO process (*Onboarding Dataset Catalog to FDC via MetaZone*) runs during the 6th stage of the production deployment for `dz.ied`.
-
-During this stage, we compare the payload from the current release against the previously released version to detect any differences. If differences are found, the updated payload is pushed to the MetaZone via the `v2/metadata/` endpoint.
-
-The last two releases of `dznode strats.ied` were triggered on **20th June 2025** and **25th June 2025**. While the 25th June deployment did reach the STO stage, it failed **before executing any of its initial logic** — that is, before retrieving the previous release version or initiating the diff calculation.
-You can refer to the deployment logs here: \[<link>]
-
-If you encounter a similar issue in future deployments, please do let us know so we can take a closer look.
-
-Best regards,
-Supriya
-
----
-
-Let me know if you'd like to tone it down further or shorten it.
-As part of this stage, we compare the payload from the current release against the previously released version to identify any differences. If changes are detected, the updated payload is pushed to the MetaZone via the v2/metadata/ endpoint.
+We’ve looked into the issue from our end, but if it resurfaces or results in repeated requests again, we’re happy to revisit it.
 
 
