@@ -1,4 +1,1 @@
-We’ve looked into the issue from our end, but if it resurfaces or results in repeated requests again, we’re happy to revisit it.
 
-
-but if you notice another unusually high number of requests, please feel free to reach out — we’ll be happy to revisit it.
