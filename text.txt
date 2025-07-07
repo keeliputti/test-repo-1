@@ -1,1 +1,1 @@
-
+If MZ agrees to trigger our API for immediate dataset changes, they will also share the modified dataset configuration in a nested format following the provider → package → dataset hierarchy."
