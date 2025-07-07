@@ -1,2 +1,1 @@
-Quick question — what additional checks are implemented on the  side for validating a Cain’s group?
-Do you check for the existence of the group, in addition to applying a regex pattern?
+dz.get Failure for Datasets Onboarded via Config Service When Provider/Package Is Onboarded via Actible
