@@ -1,6 +1,1 @@
-How should we handle decommissioned datasets?
-Should there be a dedicated endpoint for MZ to call in order to delete a decommissioned dataset? Given the nature of such changes, should this deletion be processed immediately?
-Update frequency from MZ:
-Should MZ push updates to us as soon as a dataset is modified, or would it be more appropriate for them to send updates at regular intervals?
-Payload structure for updates:
-Should we require MZ to send a consolidated payload containing all modified datasets in a single request—allowing us to iterate through each dataset internally—or should we support one request per dataset?
+Discussion Topics: Dataset Sync Flow and Responsibilities in MZ Feedback Loop
