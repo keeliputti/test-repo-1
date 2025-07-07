@@ -1,1 +1,8 @@
-If MZ chooses to hit our API with all modified dataset configurations in the format { provider: { package: { dataset: { ... } } } }
+Yes, we do have a PR Validator in place that posts validation results directly on the pull request. It did run successfully for Gao’s PR and returned a positive response.
+
+Based on our current Pydantic schema, all fields were validated as expected: link to repo. I’ll connect with Ehoussou to understand what additional validations might be implemented on their side.
+
+That said, here are two improvements we should consider on our end:
+
+Add a DAP group existence check in the PR validator script.
+Update the Pydantic schema to reject empty strings within lists.
