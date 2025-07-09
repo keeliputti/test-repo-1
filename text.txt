@@ -1,1 +1,2 @@
-
+I think you've mixed up two different onboarding methods. Also, I don't see the configurations set for the package itself.
+Please follow this document for the correct onboarding configurations at each hierarchy level.
