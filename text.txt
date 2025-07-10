@@ -1,3 +1,25 @@
-Filling out the Onboarding form does not onboard the dataset configurations to Datazone. The form you referred to is intended for the Governance team to review onboarding requests and applies only to onboarding via repositories.
+Great direction! Here’s a polished and professional version of your full message, incorporating your intent and phrasing suggestions:
 
-Before proceeding with your request, we’d like to confirm whether the dataset contains any sensitive information, and whether you’d prefer to restrict access — both to the dataset itself and the associated query logs — to your proid only.
+---
+
+We have an HTTP connector available — you can expose an API that connects to 3Forge, and this API can then be accessed via Datazone.
+
+The API can also be secured. If needed, you can restrict access by allowing only specific `proid`s (like ours) to call the API.
+
+To help you get started, here’s a sample recipe dataset you can refer to for understanding the connection parameters used with HTTP:
+
+\[**<link to sample recipe dataset or dataset name>**]
+
+For your HTTP connection, you'll need to configure the following parameters:
+
+* `url`
+* `httpMethod`
+* `requestHeaders`
+* `queryParams` *(if applicable)*
+* `authentication` *(if securing the API)*
+
+Let us know if you need any help with the setup or parameter values.
+
+---
+
+Let me know if you’d like this adapted for Slack, email, or confluence format.
