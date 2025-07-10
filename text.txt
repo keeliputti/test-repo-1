@@ -1,4 +1,1 @@
-
-Just to summarize the current plan, based on a quick discussion with Jitesh:
-
-The team has datasets under the same package (valuation control/inflation) currently onboarded in both repo and dzaccessible. To avoid conflicts during testing and rollout, the suggested approach is to onboard these datasets under a slightly different test package (e.g., inflation_coe) within dzaccessible. Once validated, the tested setup can replace the version currently served via dznode.strats.fid.
+The suggested approach is to carry out testing under a separate test package (e.g., inflation_coe) within dzaccessible. Once validated, the datasets can be onboarded back under the original inflation package in repo. This approach looks reasonable
