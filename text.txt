@@ -1,1 +1,3 @@
-The suggested approach is to carry out testing under a separate test package (e.g., inflation_coe) within dzaccessible. Once validated, the datasets can be onboarded back under the original inflation package in repo. This approach looks reasonable
+Filling out the Onboarding form does not onboard the dataset configurations to Datazone. The form you referred to is intended for the Governance team to review onboarding requests and applies only to onboarding via repositories.
+
+Before proceeding with your request, we’d like to confirm whether the dataset contains any sensitive information, and whether you’d prefer to restrict access — both to the dataset itself and the associated query logs — to your proid only.
