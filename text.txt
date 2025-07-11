@@ -1,12 +1,1 @@
-Is the dataset static, or do you expect it to be refreshed periodically (e.g., daily, weekly, monthly)?
-
-You can also explore more in our [DZ documentation](#) — it covers these and other options in more depth.
-
-Happy to help further once you have a sense of what might fit best!
-
-Best,
-Supriya
-
----
-
-Let me know if you want to shorten it even more or make it more casual.
+If you're considering this approach, we may want to understand aspects like data size and expected performance, as data is fetched on-the-fly.
