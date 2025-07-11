@@ -1,1 +1,38 @@
+Absolutely — here’s a much more **concise**, **to-the-point**, and **friendly-professional** version that introduces just two options and keeps things clear for the user:
 
+---
+
+**Subject:** Options for Onboarding Your Data into DZ
+
+Hi \[Name],
+
+Thanks for reaching out! Based on your use case, here are two onboarding options you could consider:
+
+---
+
+**1. Passthrough Mode**
+DZ connects directly to your source without storing the data. This is quick to set up, but if you’re going with this, we’d want to understand things like how large your data is and whether performance is a concern — since the data is fetched live.
+
+---
+
+**2. Publishable Datasets (for One-time or Occasional Loads)**
+You configure your dataset once, then use the `store` endpoint to upload your CSV or a dataframe derived from it. Simple and works well if you plan to store data occasionally.
+
+---
+
+To help narrow down the approach, it’d be good to know:
+
+* Would you prefer connecting to your source or storing the data in DZ?
+* How frequently do you plan to load the data?
+* Is this a one-time load or something recurring?
+
+You can also explore more in our [DZ documentation](#) — it covers these and other options in more depth.
+
+Happy to help further once you have a sense of what might fit best!
+
+Best,
+Supriya
+
+---
+
+Let me know if you want to shorten it even more or make it more casual.
