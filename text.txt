@@ -1,5 +1,1 @@
 
-Boldizsar has onboarded the dataset valuation control/inflation soa/breakeven ve bef infto to the Config Service in QA.
-Since this dataset integrates with the DAL service, it needs to be configured to run in the dedicated dzdal team instance.
-
-Could you please help with the necessary configuration changes in si_proid_config to support this?
