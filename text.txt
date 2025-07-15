@@ -1,16 +1,10 @@
+This is regarding the sacr_reault_rwa dataset.
+I'm attaching two config files stored in DZ:
 
+The earlier version when the GET query was working
+The latest version where the GET query is failing
+Could you please confirm if the configurations in both files match, and whether the schema and query are aligned with your Snowflake database setup?
+Also, just to confirm — there haven’t been any changes to the underlying database/table, correct?
 
-1. RPE to do basic checks before escalating to devs – *RPE team – Open*
-2. Need activity log for accessible usage; Supriya to share dataset list – *Alak/Supriya – In Progress*
-3. OOM on Accessible – Core & Data to jointly troubleshoot next time – *Action Point – Closed*
-4. STO dataset not reaching MZ – *Pallavi – Call to be scheduled*
-5. STO IDAP group check to be added – *Pallavi – Pending*
-6. `dsp_global` onboarded via mixed routes (config/repo); fix under review – *Aditya/Lakshmi – In Review*
-
-   * First cleanup by Niti, Lakshmi, Kimia; second by Supriya
-7. Entitlement issue: user unable to publish despite valid access – *Supriya – Investigating*
-8. Onboarding fails silently for metrics dev; change proposed to skip store call – *Aditya – Awaiting Approval*
-9. Petko's dataset partially picked during release; root cause unclear – *Release team – Open*
-10. Collapse not working for Varda – *Shubham – Resolved*
-11. HTTP source-based onboarding support – *Supriya – Closed*
-12. Marketplace columns broken for Lui/Catherine – *TBD – Open*
+Thanks,
+Supriya
