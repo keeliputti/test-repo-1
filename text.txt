@@ -1,10 +1,21 @@
-This is regarding the sacr_reault_rwa dataset.
-I'm attaching two config files stored in DZ:
-
-The earlier version when the GET query was working
-The latest version where the GET query is failing
-Could you please confirm if the configurations in both files match, and whether the schema and query are aligned with your Snowflake database setup?
-Also, just to confirm — there haven’t been any changes to the underlying database/table, correct?
-
-Thanks,
-Supriya
+| Category               | Sub-Category                | Description                                            | Status      | Owner(s)        | Notes / Reference                                                    |
+| ---------------------- | --------------------------- | ------------------------------------------------------ | ----------- | --------------- | -------------------------------------------------------------------- |
+| Config Service related | Outage (twice)              | `dsp_global` onboarded via mixed routes (config/repo)  | In Progress | Aditya, Lakshmi | Fix under review<br>RE: 2025/07/10 data missing from SI model, deals |
+| Config Service related | Onboarding fails silently   | Validation failures not surfaced to user (Metrics Dev) | In Progress | Aditya          | Proposed skip of store call – awaiting approval                      |
+| Generic Data related   | get\_dataset\_config Error  | BRM/SecuritiesLending error                            | Closed      | Data + Core     | Fix merged, bum service bounced<br>\[JOBFAIL]                        |
+| Generic Data related   | OOM on Accessible           | Accessible service going OOM due to large payload      | Closed      | Core + Data     | RE: `dznode-dzaccessible-1`                                          |
+| Generic Data related   | STO dataset not reaching MZ | Dataset not flowing to MZ                              | TBD         | Pallavi         | Call to be scheduled                                                 |
+| Generic Data related   | STO – High volume           | Unusually high number of requests                      | Closed      | Supriya         |                                                                      |
+| Generic Data related   | STO – IDAP check missing    | Missing check during onboarding                        | In Progress | Pallavi         | To be added                                                          |
+| Generic Data related   | Entitlement issue           | User unable to publish, though API returns True        | Closed      | Core            | Will recheck if it recurs                                            |
+| Generic Data related   | Petko release issue         | Dataset not working only during release                | Closed      | —               | Root cause unclear                                                   |
+| Generic Data related   | Collapse not working        | Collapse issue in Varda                                | Closed      | Shubham         | RE: Missing data and partitions                                      |
+| Generic Data related   | Marketplace columns         | Columns not reflecting for Lui/Catherine               | In Progress | —               |                                                                      |
+| Generic Data related   | Snowflake schema mismatch   | Arrow schema mismatch                                  | In Progress | Supriya         | RE: \[finance capital] error                                         |
+| Other Onboarding       | DAL Source                  | Start/end passing issue                                | TBD         | FRPPE           | Config Service                                                       |
+| Other Onboarding       | New dataset (FID)           | FID onboarding                                         | TBD         | —               | Config Service                                                       |
+| Other Onboarding       | TP Source                   | TP onboarding                                          | TBD         | Prince, FRPPE   |                                                                      |
+| Other Onboarding       | Website API                 | Onboarding from APIs                                   | TBD         | —               | Config Service                                                       |
+| Other Onboarding       | ODF Source                  | Accessible onboarding                                  | TBD         | ART             |                                                                      |
+| Discussion             | RPE checks                  | RPE to triage before escalation                        | TBD         | RPE Team        |                                                                      |
+| Discussion             | Accessible usage logs       | Supriya to share list with Alak                        | In Progress | Supriya, Alak   |                                                                      |
