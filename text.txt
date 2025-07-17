@@ -1,1 +1,6 @@
-
+Yes, the URL should return JSON-formatted data. When the dataset is fetched, the response is transformed into a pandas DataFrame for easy viewing. You can include parameters in the URL and pass their values through the dataset get query to get dynamic responses.
+a. Here's the URL of our HTTP recipe dataset for reference: [URL link]
+I've already shared the go-to documentation for setting your configurations: Onboard via Config Service.
+The <other data source based parameters> section in set_dataset_config is where your HTTP connection parameters would go (as shared earlier in the thread).
+For details, refer to: Configure your dataset for data onboarding.
+Attaching the config received via get_dataset_config for 'recipes/config_service/http', for your reference.
