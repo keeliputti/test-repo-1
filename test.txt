@@ -1,0 +1,3 @@
+We realized that our script was picking up changes from the dev environment for the prod deployment.
+While we work on a permanent fix, for now we’ll ensure we don’t touch our Pydantics, which had caused default value changes across all dataset configs used for comparison.
+The release for dznode strats.ied happened at 17:07:23 GMT on 17th July, which is before our changes were reverted yesterday.
