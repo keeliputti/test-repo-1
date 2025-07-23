@@ -1,1 +1,1 @@
-Pallavi and I have reviewed this, and we can confirm that the issue is not related to the STO script or our Pydantic models—there have been no changes on that front. Upon further investigation, it appears that a legitimate metadata update was made to all the ISTT datasets.
+Quick question—do you plan to create additional package names under the valuation_control provider, apart from inflation_soa?
