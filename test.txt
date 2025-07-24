@@ -1,1 +1,7 @@
+We noticed that a previous release of these datasets had vendor=[], whereas the latest release has vendor=null.
 
+In an earlier version, we had updated the Pydantic schema, which introduced a change in default values across datasets. For dznode.starts.ied, this was picked up before the schema was reverted, resulting in the shift from [] to null.
+
+If the intended metadata update is indeed from [] to null for the vendor field, we would need explicit approval to align with the current Pydantic schema.
+
+Could the MZ team please confirm what metadata change is currently under review for these datasets? The Metadata Update page does not clearly reflect the change.
