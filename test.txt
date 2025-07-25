@@ -1,3 +1,1 @@
-Which MZ field(s) does the vendor field map to?
-There are no other config changes apart from the vendor update — could you help us understand why this change is reflected as a metadata update?
-In this dataset, the metadata shows a change in the vendor field — from a list value to null. However, based on the config in the repository, it doesn’t appear to have had a value set in the first place. [Link to repo]
+The configurations I shared were based on your earlier suggestion in this thread to align with the settings of d....e. I’ll set up a meeting to discuss the solution further.
