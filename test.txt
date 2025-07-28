@@ -1,4 +1,1 @@
-Thanks for flagging this. The issue has now been resolved and the fix is in production
-
-It was caused by a change in the mz response model, which triggered unexpected behavior in some cases. We've made the necessary adjustments at our end.
 
