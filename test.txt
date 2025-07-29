@@ -1,12 +1,1 @@
-Got it! Here's the revised version with that clarification:
-
----
-
-**"For your use case, where production configurations are accessing the dev Snowflake DB, you’ll need to grant the prod proid access to the dev database.**
-
-**While there are no restrictions from the DZ (DataZone) side on cross-environment access, connecting from lower to higher environments is generally not recommended due to security concerns. Lower-environment proids typically have fewer restrictions and can be impersonated more easily, which poses a risk when interacting with production data or configurations."**
-
----
-
-Let me know if you'd like to add a concrete example or keep it abstract.
 
