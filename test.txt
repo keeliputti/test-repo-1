@@ -1,1 +1,4 @@
+Governance has received a set of bulk requests for reuters datasets via the STO process. Upon investigation, it was observed that these datasets were published to MZ after passing Pydantic validation, which succeeded due to the 'developers_team' parameter being relaxed at the package level.
+
+Before Governance proceeds with approval, a confirmation is requested. Note that datasets with scope set to 'internal' are excluded from cataloging; all others are cataloged by default.
 
