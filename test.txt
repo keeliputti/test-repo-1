@@ -1,2 +1,1 @@
-Currently, when configurations are set via the store service, they are first published to Mongo, and then persisted to the config-store.
-If the Mongo publish fails, an error is indeed thrown. However, once the configuration is successfully published to Mongo and is retrievable from there, I believe it doesn't warrant a failure response—even if persisting to the config-store fails—since the configuration remains available for fetch operations.
+
